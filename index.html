@@ -2,128 +2,330 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>You should know it</title>
-<link rel="stylesheet" href="abcf.css">    
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+      <style>
+       h1 { font-size:1.6rem; }
+       h2 { font-size:1.1rem; }
+       #wrapper td {
+          padding-left:1px;
+          padding-right:1px;
+       }
+       .calc { padding:10px; background:#f9563a; }
+       .calc td { background:#f9563a !important; }
+       .calc button { margin:10px auto; }
+       .calc button img { filter:brightness(0) invert(1); }
+       .calc>tbody>tr>td {
+          padding-top:5px;
+          padding-bottom:5px;
+       }
+       .calc>tbody>tr>td>input[type=number] { 
+          width:100px;
+       }
+       #calc2>tbody>tr:nth-child(5)>td input[type=number] { 
+          width:100%;
+       }
+       .calc>tbody>tr>td:nth-child(1)>select {
+          width:160px;
+       }
+       .calc>tbody>tr>td:nth-child(2)>select {
+          width:80px;
+       }
+      /*.calc tr td:nth-child(3) { width:180px; }*/
+      .calc>tbody>tr>td:nth-child(4) img { opacity:0.5; padding-left:3px; }
+      #age { height:170px; }
+      .ui-datepicker-trigger {
+        display: inline;
+        padding:0px;
+        padding-left:3px;
+        vertical-align:baseline;
+        position:relative;
+      }
+    @media all and (max-width: 576px) {
+       .calc { width:100%; }
+       .calc td { float:left; }
+       .calc td:nth-child(7) { clear:left; }
+       .calc select { width:300px; }
+       .calc tr:nth-child(2) td:nth-child(4) { padding-top:12px; }
+       .calc tr:nth-child(4) td:nth-child(4) { padding-top:12px; }
+       #calc2>tbody>tr:nth-child(4)>td:nth-child(1) { width:100%; }
+       .calc tr:nth-child(7) td { width:100%; }
+       #month1,#month2,#month3 { width:120px; }
+       #year1,#year2,#year3 { width:80px; }
+    }
+    </style>
+
+ 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js" defer></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script>
+    $( document ).ready(function() {
+       $("#dp1").hide();
+       $("#dp2").hide();
+       $("#dp3").hide();
+      var obj=$("#days1");
+      setDays(obj, 31);
+      obj=$("#days2");
+      setDays(obj, 31);
+      obj=$("#days3");
+      setDays(obj, 31);
+      obj=$("#days4");
+      setDays(obj, 31);
+    initDate();
+    $("#dp1").datepicker({
+      changeMonth: true,
+      changeYear: true,
+    });
+    $("#dp2").datepicker({
+        changeMonth: true,
+        changeYear: true,
+    });
+    $("#dp3").datepicker({
+        changeMonth: true,
+        changeYear: true,
+    });
+    $("#picker1").click(function() {
+         if( $("#dp1").is(":hidden") )
+         {
+            var y=$("#year1").val();
+            var m=$("#month1")[0].selectedIndex;
+            var d=$("#days1")[0].selectedIndex+1;
+            if( y=="" ) y=1990;
+            $("#dp1").datepicker("setDate", new Date(y,m,d));
+            $("#dp1").show();
+         }
+         else
+            $("#dp1").hide();
+    });
+    $("#picker2").click(function() {
+         if( $("#dp2").is(":hidden") )
+         {
+            var y=$("#year2").val();
+            var m=$("#month2")[0].selectedIndex;
+            var d=$("#days2")[0].selectedIndex+1;
+            if( y=="" ) y=1990;
+            $("#dp2").datepicker("setDate", new Date(y,m,d));
+            $("#dp2").show();
+         }
+         else
+            $("#dp2").hide();
+    });
+    $("#picker3").click(function() {
+         if( $("#dp3").is(":hidden") )
+         {
+            var y=$("#year3").val();
+            var m=$("#month3")[0].selectedIndex;
+            var d=$("#days3")[0].selectedIndex+1;
+            if( y=="" ) y=1990;
+            $("#dp3").datepicker("setDate", new Date(y,m,d));
+            $("#dp3").show();
+         }
+         else
+            $("#dp3").hide();
+    });
+    $("#dp1").change(function() {
+      var date=$("#dp1").val();
+      $("#month1")[0].selectedIndex=parseInt(date.substring(0,2))-1;
+      $("#days1")[0].selectedIndex=parseInt(date.substring(3,5))-1;
+      $("#year1").val(date.substring(6,10));
+    });
+    $("#dp2").change(function() {
+      var date=$("#dp2").val();
+      $("#month2")[0].selectedIndex=parseInt(date.substring(0,2))-1;
+      $("#days2")[0].selectedIndex=parseInt(date.substring(3,5))-1;
+      $("#year2").val(date.substring(6,10));
+    });
+    $("#dp3").change(function() {
+      var date=$("#dp3").val();
+      $("#month3")[0].selectedIndex=parseInt(date.substring(0,2))-1;
+      $("#days3")[0].selectedIndex=parseInt(date.substring(3,5))-1;
+      $("#year3").val(date.substring(6,10));
+    });
+    });
+  function setDays(obj, n) {
+    $(obj).find('option')
+        .remove()
+        .end()
+    for( var i=1; i<=n; i++)
+      $(obj).append('<option>'+i+'</option>');
+  }
+  function initDate() {
+      var d = new Date();     
+      var obj=$("#days1");
+      setDays(obj, 31);
+      obj=$("#days2");
+      setDays(obj, 31);
+      $("#days2").prop("selectedIndex", d.getDate()-1 );
+      $("#month2").prop("selectedIndex", d.getMonth() );
+      $("#year2").val( d.getFullYear() );
+      $("#age").val("");
+  }
+  function calc() {
+    var txt;
+    var day1=$("#days1").prop("selectedIndex")+1;
+    var month1=$("#month1").prop("selectedIndex")+1;
+    var year1=$("#year1").val();
+    if( year1=='' ) year1="1990";
+    var day2=$("#days2").prop("selectedIndex")+1;
+    var month2=$("#month2").prop("selectedIndex")+1;
+    var year2=$("#year2").val();
+    var d1 = moment([year1, month1-1, day1]);
+    var d2 = moment([year2, month2-1, day2]);
+    var years = d2.diff(d1, 'years');
+    var months = d2.diff(d1, 'months')-years*12;
+    var d3 = d1.add(years,'years').add(months,'months');
+    var days = d2.diff(d3, 'days');
+    txt = years+(years==1?" year, ":" years, ")+months+(months==1?" month, ":" months, ")+days+(days==1?" day":" days");
+    d1 = moment([year1, month1-1, day1]);
+    d2 = moment([year2, month2-1, day2]);
+    txt+= "<br>= "+(d2.diff(d1, 'years', true)).toFixed(2)+" years";
+    d1 = moment([year1, month1-1, day1]);
+    d2 = moment([year2, month2-1, day2]);
+    txt+= "<br>= "+(d2.diff(d1, 'months', true)).toFixed(2)+" months";
+    d1 = moment([year1, month1-1, day1]);
+    d2 = moment([year2, month2-1, day2]);
+    txt+= "<br>= "+(d2.diff(d1, 'weeks', true)).toFixed(2)+" weeks";
+    d1 = moment([year1, month1-1, day1]);
+    d2 = moment([year2, month2-1, day2]);
+    txt+= "<br>= "+(d2.diff(d1, 'days', true)).toFixed(0)+" days";
+    d1 = moment([year1, month1-1, day1]);
+    d2 = moment([year2, month2-1, day2]);
+    txt+= "<br>= "+(d2.diff(d1, 'hours', true)).toFixed(0)+" hours";
+    d1 = moment([year1, month1-1, day1]);
+    d2 = moment([year2, month2-1, day2]);
+    txt+= "<br>= "+(d2.diff(d1, 'minutes', true)).toFixed(0)+" minutes";
+    d1 = moment([year1, month1-1, day1]);
+    d2 = moment([year2, month2-1, day2]);
+    txt+= "<br>= "+(d2.diff(d1, 'seconds', true)).toFixed(0)+" seconds";
+    
+    
+    $("#age").html(txt);
+  }
+
+  function calc2() {
+    var txt;
+    var day3=$("#days3").prop("selectedIndex")+1;
+    var month3=$("#month3").prop("selectedIndex")+1;
+    var year3=$("#year3").val();
+    if( year3=='' ) year3="1990";
+    var age2=$("#age2").val();
+    var d3 = moment([year3, month3-1, day3]);
+    d3.add(age2, 'years');
+    txt=d3.format("MMMM D YYYY")+"\n";
+    txt+=d3.fromNow();
+    $("#age").html(txt);
+  }
+</script>
+
+
 </head>
 <body>
-    <h1 r>NEWS</h1>
-    <h2>Breaking News!</h2>
-<h3>breaking news</h3>
-    <p>A new start-up has just launched a new generation connected watch. They have named it eSmart !
-        The manufacturers of this revolutionary ‘smartwatch’ have made a real impression at the beginning of this year, with thousands of customers already convinced. The eSmart is the first high-tech new generation connected watch which is 3 TIMES less expensive than its direct competitors. The pickiest customers have all fallen for its sleek design, the ergonomics of its body and its ease of use.
-        
-        <strong>sales have really skyrocketed all over the world…</strong> 
-        
-        And we wanted <em>help</em>  you understand why and how this connected watch has become popular so quickly?!
-        
-        It is a known fact that the big brands earn huge amounts profits from their sales. Every year, they persuade customers to purchase supposedly new connected watches with the same functionalities as the previous versions but always at a higher price… (almost the price of an iPhone).
-        
-        We have asked ourselves: would we be able to manufacture a connected watch as performant as a Samsung Galaxy or other connected watches which are currently ‘dominating’ the technological market without breaking the bank ?
-        
-        We have conducted our own research in order to find out why everybody started choosing the eSmart over, for example, a Samsung connected watch.
-        
-        What is it?
-        It is called eSmartand has already conquered the hearts of thousands of users who have swapped their watch (classical or connected) for this technological beauty… Not surprising, considering it’s very similar to other high-performing connected watches, except a lot cheaper!
-        
-        </p>
-
-<h1> What to do <strong>NEXT?</strong></h1>
-<p><br>✅The first Fitness watch with a high-performing heart monitor.
-
-    <br>✅HD touchscreen with an exceptional lighting which adapts to the natural environmental light.
-    
-    <br>✅A highly-reliable heart rate monitor.
-    
-    <br>✅Sleep and fitness tracker, as well as heart monitor all integrated in a connected watch which is 100% waterproof.
-    
-    <br>✅The eSmart will help you track your progress and will encourage you to be more active.
-    
-    <br>✅Personal vocal assistant integrated functionality which allows the user to answer calls, organise meetings and receive notifications (SMS, Facebook, WhatsApp, Gmail…).</p>
-    <br>*** FOR FURTHER INFORMATION YOU CAN SEARCH ON 
-    <a href="http://www.google.com" target="_blank">GoOgLe </a>
-    ***
-<br>
-<br>
-<br>
-<br>
-<ul type="square"><em><strong>HOW TO CREATE A GOOGLE ACCOUT</strong></em>
-  <li>Open control panel</li>
-  <li>Go to setting</li>
-  <li>Click on create account</li>
-</ul>
-<ol type="a">
-    <li>Open control panel</li>
-  <li>Go to setting</li>
-  <li>Click on create account</li>
-</ol>
-<h2>table</h2>
-<table>
-
-    <thead>
-        <th>NAME</th>
-        <th>AGE</th>
-        <th>CLASS</th>
-        <th>SECTION</th>
-        
-</thead>
-<tbody>
-
+     
+<div id="lcol">
+    <h1 class="text-center">
+Age Calculator</h1>
+<h2 class="text-center text-danger">
+Calculate age from date of birth to current date </h2>
+<div id="doc" class="d-flex justify-content-center bg-dark p-5">
+   <!-- #BeginEditable "doctext" -->
+   <div style="background-color: #f9563a;" class="p-5">
+       
+     <form name="calcform" autocomplete="off">
+       <table class="calc">
+         <tbody>
+<tr>
+         <td colspan="4">Date of birth:</td>
+         </tr>
+<tr>
+         <td>
+           <select id="month1" class="form-control form-control-lg">
+             <option>January</option>
+             <option>February</option>
+             <option>March</option>
+             <option>April</option>
+             <option>May</option>
+             <option>June</option>
+             <option>July</option>
+             <option>August</option>
+             <option>September</option>
+             <option>October</option>
+             <option>November</option>
+             <option>December</option>
+           </select>
+         </td>
+         <td>
+           <select id="days1" class="form-control form-control-lg">
+             <option>1</option>
+           </select>
+         </td>
+         <td><input type="number" step="1" id="year1" placeholder="1990" class="form-control form-control-lg"></td>
+          
+         </tr>
+<tr>
+           <td colspan="4">
+                <div id="dp1">
+</div>
+</td>
+          </tr>
+<tr>
+         <td colspan="4">Age at the date of:</td>
+         </tr>
+<tr>
+         <td>
+           <select id="month2" class="form-control form-control-lg">
+             <option>January</option>
+             <option>February</option>
+             <option>March</option>
+             <option>April</option>
+             <option>May</option>
+             <option>June</option>
+             <option>July</option>
+             <option>August</option>
+             <option>September</option>
+             <option>October</option>
+             <option>November</option>
+             <option>December</option>
+           </select>
+         </td>
+         <td>
+           <select id="days2" class="form-control form-control-lg">
+             <option>1</option>
+           </select>
+         </td>
+         <td><input type="number" step="1" id="year2" placeholder="1990" class="form-control form-control-lg"></td>
+         
+         </tr>
+<tr>
+           <td colspan="4">
+                <div id="dp2">
+</div>
+</td>
+          </tr>
+<tr>
+           <td colspan="4">
+           <button type="button" title="Calculate" class="btn btn-success" onclick="calc()"> Calculate</button>
+           <button type="reset" title="Reset" class="btn btn-warning"> Reset</button>
+           </td>
+          </tr>
+<tr>
+         <td colspan="4">Age result:</td>
+         </tr>
+<tr>
+         <td colspan="4">
+           <div id="age" rows="6" name="age" class="form-control form-control-lg bg-dark text-light pre-scrollable">
+</div>
+</td>
+         </tr>
 </tbody>
-</table>
-<img src="https://www.news-gadget.com/smartwatch/en/4/images/world-watch-2.png" alt="Loading" height="360" width="360">
-<br> <img src="https://www.news-gadget.com/smartwatch/en/4/images/world-watch-carac.png" alt="Loading" height="500" width="700br">
-<br>
-<br>
-<form action="bekend.php">
-    <div>Name:<input type="text"></div>
-    <br>
-    <div>Age:<input type="number"></div>
-    <br>
-    <div>Gender:Male<input type="radio" name="gender">Female<input type="radio" name="gender"></div>
-    <br>
-    <div>Email:<input type="email"></div>
-    <br>
-    <div><label for="city">Select Your City:</label>
-        <select name="mycar" id="city">
-            <option value="a">Select</option>
-            <option value="a">Akola</option>
-            <option value="b">Amravati</option>
-            <option value="n">Nagpur</option>
-            <option value="l">Mumbai</option>
-            <option value="k">Pune</option>
-            <option value="t">Nasik</option>
-            <option value="g">Buldana</option>
-
-        </select>
-        
-
-    </div>
-    <br>
-    <div>Roll No:<input type="text"></div>
-    <br>
-    <div>Date Of Birth:<input type="date"></div>
-    <br>
-    <div>Write About Youself<br><textarea name="text"  cols="30" rows="10"></textarea></div>
-    <br>
-    <div>YOU HAVE ENTERED ALL DATA CORRECTLY:<input type="checkbox"></div>
-    <br>
-    <div> <input type="submit" value="Submit"></div>
-    <br>
-    <div><input type="reset" value="Reset"></div>
-    <br>
-    <div>Roll No:<input type="search"></div>
-    <br>
-    <div>Roll No:<input type="password"></div>
-    <br>
-    <div>Roll No:<input type="week"></div>
-    <br>
-    <div>Roll No:<input type="image"></div>
-    <br>
-    <div>Roll No:<input type="file"></div>
-    <br>
-
-
+       </table>
 </form>
+</div>
+</div>
+</div>
+
 </body>
 </html>
